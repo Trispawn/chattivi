@@ -16,7 +16,7 @@ app.post('/api/chat', async (req, res) => {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.XAI_API_KEY}`
+            'Authorization': `Bearer ${process.env.xai-JpPh2uLDf5XmLflbQxjloiYd0NLxXaqJjHjqHu0CzkZuSgOvezQY2HTZuoJ2vJZ81sjbgKwhVp6kgiQX}`
         },
         body: JSON.stringify({
             messages: [
