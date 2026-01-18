@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VideoShorts - Videos desde GitHub</title>
+    <title>VideoShorts - Autoplay Automático</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -303,6 +303,64 @@
             cursor: pointer;
         }
         
+        .next-video-timer {
+            position: absolute;
+            top: 120px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 5;
+            display: none;
+        }
+        
+        .next-video-timer.show {
+            display: block;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        .skip-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 4;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        .skip-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .skip-text {
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .skip-text:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
         @media (max-width: 500px) {
             .container {
                 max-width: 100%;
@@ -397,6 +455,8 @@
         // Variable para almacenar el orden actual de los videos
         let currentVideoOrder = [];
         let currentVideoIndex = 0;
+        let skipTimer = null;
+        let userInteracted = false;
 
         // Inicializar la página
         function initPage() {
@@ -489,6 +549,57 @@
             showShuffleNotice();
         }
 
+        // Iniciar temporizador para siguiente video
+        function startNextVideoTimer(videoElement, videoId) {
+            // Limpiar timer anterior si existe
+            if (skipTimer) {
+                clearTimeout(skipTimer);
+                skipTimer = null;
+            }
+            
+            // Mostrar temporizador
+            const timerElement = document.querySelector(`#video-${videoId} .next-video-timer`);
+            if (timerElement) {
+                timerElement.classList.add('show');
+                timerElement.textContent = "Siguiente en 1 segundo...";
+            }
+            
+            // Configurar timer para cambiar al siguiente video después de 1 segundo
+            skipTimer = setTimeout(() => {
+                goToNextVideo();
+            }, 1000);
+        }
+
+        // Ir al siguiente video
+        function goToNextVideo() {
+            // Limpiar timer
+            if (skipTimer) {
+                clearTimeout(skipTimer);
+                skipTimer = null;
+            }
+            
+            // Calcular siguiente índice
+            const nextIndex = (currentVideoIndex + 1) % 3;
+            
+            // Hacer scroll al siguiente video
+            videosContainer.scrollTo(0, nextIndex * window.innerHeight);
+        }
+
+        // Ir al video anterior
+        function goToPrevVideo() {
+            // Limpiar timer
+            if (skipTimer) {
+                clearTimeout(skipTimer);
+                skipTimer = null;
+            }
+            
+            // Calcular índice anterior
+            const prevIndex = currentVideoIndex === 0 ? 2 : currentVideoIndex - 1;
+            
+            // Hacer scroll al video anterior
+            videosContainer.scrollTo(0, prevIndex * window.innerHeight);
+        }
+
         // Renderizar los videos en el contenedor
         function renderVideos() {
             // Limpiar el contenedor
@@ -505,6 +616,10 @@
                 
                 videoCard.innerHTML = `
                     <div class="current-video">Video ${index + 1} de 3</div>
+                    <div class="next-video-timer"></div>
+                    <div class="skip-overlay">
+                        <div class="skip-text">Click para cancelar cambio automático<br><small>O espera 1 segundo para siguiente video</small></div>
+                    </div>
                     <video ${isActive ? 'autoplay' : ''} ${isActive ? 'muted' : ''} loop playsinline preload="metadata">
                         <source src="${video.videoUrl}" type="video/mp4">
                         Tu navegador no soporta el elemento de video.
@@ -546,12 +661,47 @@
                 // Configurar eventos para el video
                 const videoElement = videoCard.querySelector('video');
                 const overlay = videoCard.querySelector('.video-overlay');
+                const skipOverlay = videoCard.querySelector('.skip-overlay');
                 const playBtn = videoCard.querySelector('.play-btn');
+                const timerElement = videoCard.querySelector('.next-video-timer');
                 
                 // Manejar errores de carga de video
                 videoElement.addEventListener('error', (e) => {
                     console.error(`Error cargando video ${video.id}:`, e);
                     showVideoError(video.id);
+                });
+                
+                // Detectar cuando el video termina
+                videoElement.addEventListener('ended', () => {
+                    if (isActive && !userInteracted) {
+                        // Mostrar overlay para cancelar
+                        skipOverlay.classList.add('show');
+                        
+                        // Iniciar temporizador para siguiente video
+                        startNextVideoTimer(videoElement, video.id);
+                    }
+                });
+                
+                // Cancelar cambio automático si el usuario hace click
+                skipOverlay.addEventListener('click', () => {
+                    skipOverlay.classList.remove('show');
+                    if (timerElement) {
+                        timerElement.classList.remove('show');
+                    }
+                    if (skipTimer) {
+                        clearTimeout(skipTimer);
+                        skipTimer = null;
+                    }
+                    userInteracted = true;
+                    
+                    // Reiniciar el video desde el principio
+                    videoElement.currentTime = 0;
+                    videoElement.play();
+                    
+                    // Resetear userInteracted después de 5 segundos
+                    setTimeout(() => {
+                        userInteracted = false;
+                    }, 5000);
                 });
                 
                 if (isActive) {
@@ -561,6 +711,12 @@
                         videoElement.play();
                         overlay.classList.remove('show');
                         videoElement.muted = false;
+                        userInteracted = true;
+                        
+                        // Resetear userInteracted después de 5 segundos
+                        setTimeout(() => {
+                            userInteracted = false;
+                        }, 5000);
                     });
                     
                     videoElement.addEventListener('play', () => {
@@ -601,6 +757,12 @@
             } else {
                 video.pause();
             }
+            userInteracted = true;
+            
+            // Resetear userInteracted después de 5 segundos
+            setTimeout(() => {
+                userInteracted = false;
+            }, 5000);
         }
 
         // Configurar botones de acción (like, comentar, compartir)
@@ -662,16 +824,28 @@
                     const videoIndex = Math.round(scrollPosition / windowHeight);
                     
                     if (videoIndex !== currentVideoIndex && videoIndex >= 0 && videoIndex < 3) {
-                        // Pausar el video anterior
+                        // Limpiar timer si existe
+                        if (skipTimer) {
+                            clearTimeout(skipTimer);
+                            skipTimer = null;
+                        }
+                        
+                        // Ocultar overlays del video anterior
                         const prevVideoCard = document.querySelector(`#video-${videoData[currentVideoOrder[currentVideoIndex]].id}`);
                         if (prevVideoCard) {
                             const prevVideo = prevVideoCard.querySelector('video');
+                            const prevSkipOverlay = prevVideoCard.querySelector('.skip-overlay');
+                            const prevTimer = prevVideoCard.querySelector('.next-video-timer');
+                            
                             prevVideo.pause();
                             prevVideo.muted = true;
+                            if (prevSkipOverlay) prevSkipOverlay.classList.remove('show');
+                            if (prevTimer) prevTimer.classList.remove('show');
                         }
                         
                         // Actualizar índice actual
                         currentVideoIndex = videoIndex;
+                        userInteracted = false; // Resetear interacción del usuario
                         
                         // Reproducir el nuevo video activo
                         const currentVideoCard = document.querySelector(`#video-${videoData[currentVideoOrder[currentVideoIndex]].id}`);
@@ -688,11 +862,6 @@
                                 console.log("Error al reproducir:", e);
                             });
                         }
-                        
-                        // Actualizar la interfaz
-                        renderVideos();
-                        // Hacer scroll al video correcto (para ajustar)
-                        videosContainer.scrollTo(0, videoIndex * windowHeight);
                     }
                     
                     // Permitir nuevo scroll después de un tiempo
@@ -710,21 +879,6 @@
             setTimeout(() => {
                 shuffleNotice.classList.remove('show');
             }, 2000);
-        }
-
-        // Navegar a un video aleatorio
-        function goToRandomVideo() {
-            // Generar un índice aleatorio diferente al actual
-            let newIndex;
-            do {
-                newIndex = Math.floor(Math.random() * 3);
-            } while (newIndex === currentVideoIndex);
-            
-            // Hacer scroll al video seleccionado
-            videosContainer.scrollTo(0, newIndex * window.innerHeight);
-            
-            // Mostrar notificación
-            showShuffleNotice();
         }
 
         // Event Listeners
@@ -747,6 +901,18 @@
             // Tecla R para aleatorizar
             if (e.code === 'KeyR') {
                 shuffleVideos();
+            }
+            
+            // Tecla flecha derecha para siguiente video
+            if (e.code === 'ArrowRight') {
+                e.preventDefault();
+                goToNextVideo();
+            }
+            
+            // Tecla flecha izquierda para video anterior
+            if (e.code === 'ArrowLeft') {
+                e.preventDefault();
+                goToPrevVideo();
             }
         });
     </script>
