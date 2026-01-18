@@ -1,21 +1,180 @@
 <!DOCTYPE html>
-<html>
-<head><title>Mi Bot Grok</title></head>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miniapps AI - No Rules AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .iframe-container {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            height: 700px;
+        }
+        
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+        
+        .info {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .info h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+        
+        .info p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: #555;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .iframe-container {
+                height: 500px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .iframe-container {
+                height: 400px;
+            }
+            
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
 <body>
-  <input id="msg" placeholder="Escribe aquí, negro de mierda">
-  <button onclick="send()">Enviar</button>
-  <div id="resp"></div>
-  <script>
-    async function send() {
-      const msg = document.getElementById('msg').value;
-      const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Authorization': 'Bearer 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', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model: 'llama3-8b-8192', messages: [{role: 'user', content: msg}] })
-      });
-      const data = await resp.json();
-      document.getElementById('resp').innerHTML = data.choices[0].message.content;
-    }
-  </script>
+    <div class="container">
+        <header>
+            <h1>Miniapps AI - No Rules AI</h1>
+            <p class="subtitle">Una eina d'intel·ligència artificial sense regles que et permet explorar les possibilitats de la IA en un entorn lliure i creatiu.</p>
+        </header>
+        
+        <main>
+            <div class="iframe-container">
+                <iframe 
+                    src="https://miniapps.ai/es/no-rules-ai/" 
+                    title="Miniapps AI - No Rules AI"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            
+            <div class="info">
+                <h2>Sobre aquesta eina</h2>
+                <p>Aquesta pàgina mostra una integració de l'eina "No Rules AI" de Miniapps AI, una plataforma que ofereix eines d'intel·ligència artificial accessibles i fàcils d'utilitzar.</p>
+                <p>L'eina "No Rules AI" et permet interactuar amb un model d'IA sense restriccions predefinides, donant-te més llibertat per explorar les capacitats de la intel·ligència artificial.</p>
+                <p>El contingut es carrega directament des de <strong>https://miniapps.ai/es/no-rules-ai/</strong> mitjançant un iframe, mantenint totes les funcionalitats de l'aplicació original.</p>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Pàgina desenvolupada amb HTML, CSS i JavaScript | Contingut proporcionat per Miniapps AI</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Script bàsic per a millorar l'experiència d'usuari
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Pàgina carregada correctament');
+            
+            // Afegir un missatge de càrrega per al iframe
+            const iframe = document.querySelector('iframe');
+            iframe.addEventListener('load', function() {
+                console.log('Iframe carregat');
+            });
+            
+            // Control d'errors per al iframe
+            iframe.addEventListener('error', function() {
+                console.error('Error carregant el contingut del iframe');
+                const iframeContainer = document.querySelector('.iframe-container');
+                iframeContainer.innerHTML = `
+                    <div style="padding: 40px; text-align: center; color: #e74c3c;">
+                        <h3>Error carregant el contingut</h3>
+                        <p>No s'ha pogut carregar la pàgina de Miniapps AI. Si us plau, verifica la teva connexió a Internet o torna a intentar-ho més tard.</p>
+                        <p>També pots accedir directament a: <a href="https://miniapps.ai/es/no-rules-ai/" target="_blank">https://miniapps.ai/es/no-rules-ai/</a></p>
+                    </div>
+                `;
+            });
+        });
+    </script>
 </body>
 </html>
