@@ -1,87 +1,20 @@
 <!DOCTYPE html>
 <html lang="ca">
 <head>
-<meta charset="UTF-8">
-<title>No Rules AI - Embed Miniapp</title>
-<style>
-  body { margin:0; font-family:Arial, sans-serif; }
-  iframe { width:100%; height:500px; border:1px solid #ccc; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La meva web amb chatbot</title>
 </head>
 <body>
 
-<h2>Miniapp Embed: No Rules AI Clone</h2>
+    <h1>Benvingut a la meva web!</h1>
+    <p>Aquí pots veure el nostre contingut i provar el chatbot de HubSpot.</p>
 
-<iframe srcdoc='
-<!DOCTYPE html>
-<html lang="ca">
-<head>
-<meta charset="UTF-8">
-<style>
-  body { font-family:Arial; margin:0; display:flex; flex-direction:column; height:100vh; }
-  #chat { flex:1; padding:10px; overflow-y:auto; border-bottom:1px solid #ccc; }
-  #input-area { display:flex; padding:10px; }
-  #msg { flex:1; padding:10px; font-size:16px; }
-  button { padding:10px 20px; font-size:16px; margin-left:5px; cursor:pointer; }
-  .user-msg { text-align:right; color:#0066ff; margin:5px 0; }
-  .bot-msg { text-align:left; color:#333; margin:5px 0; }
-</style>
-</head>
-<body>
-<div id="chat"></div>
-<div id="input-area">
-  <input id="msg" placeholder="Escriu aquí..." autocomplete="off"/>
-  <button onclick="send()">Enviar</button>
-</div>
-<script>
-function send() {
-  const input = document.getElementById("msg");
-  const msg = input.value.trim();
-  if (!msg) return;
-  appendMessage(msg,"user");
-  input.value="";
-  scrollChat();
+    <!-- Altres continguts de la teva web -->
 
-  // Simula resposta del bot
-  setTimeout(()=>{
-    const botResp = simulateBot(msg);
-    appendMessage(botResp,"bot");
-    scrollChat();
-  },300);
-}
-
-function appendMessage(text,sender){
-  const div = document.createElement("div");
-  div.className = sender==="user"?"user-msg":"bot-msg";
-  div.textContent=text;
-  document.getElementById("chat").appendChild(div);
-}
-
-function scrollChat(){
-  const chat = document.getElementById("chat");
-  chat.scrollTop = chat.scrollHeight;
-}
-
-// Simula responses del “No Rules AI”
-function simulateBot(msg){
-  const responses=[
-    "Aquí tens una resposta sense regles!",
-    "No hi ha límits per a això.",
-    "Molt bé, continua parlant!",
-    "Això és interessant...",
-    "Em fas pensar!"
-  ];
-  return responses[Math.floor(Math.random()*responses.length)];
-}
-
-// Envia amb Enter
-document.getElementById("msg").addEventListener("keydown",e=>{
-  if(e.key==="Enter") send();
-});
-</script>
-</body>
-</html>
-'></iframe>
+    <!-- Start of HubSpot Embed Code -->
+    <script type="text/javascript" id="hs-script-loader" async defer src="//js-eu1.hs-scripts.com/147617419.js"></script>
+    <!-- End of HubSpot Embed Code -->
 
 </body>
 </html>
