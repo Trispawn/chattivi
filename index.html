@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VideoShorts - Scroll Vertical</title>
+    <title>VideoShorts - Mis Videos</title>
     <style>
         * {
             margin: 0;
@@ -17,7 +17,6 @@
             font-family: Arial, sans-serif;
             height: 100vh;
             overflow: hidden;
-            cursor: pointer;
         }
         
         /* CONTENEDOR PRINCIPAL CON SCROLL VERTICAL */
@@ -224,134 +223,46 @@
             z-index: 2;
         }
         
-        /* PANTALLA DE FIN (cuando termina el video) */
-        .end-overlay {
+        /* BOTONES DE NAVEGACIÓN */
+        .nav-buttons {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
+            bottom: 20px;
+            left: 20px;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            z-index: 3;
-            display: none;
+            gap: 10px;
+            z-index: 2;
         }
         
-        .end-overlay.show {
-            display: flex;
-        }
-        
-        .end-options {
-            background: rgba(30,30,30,0.9);
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            min-width: 250px;
-        }
-        
-        .end-btn {
-            background: #ff0050;
+        .nav-btn {
+            background: rgba(255,255,255,0.15);
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: 8px 15px;
             border-radius: 8px;
             cursor: pointer;
-            margin: 8px 5px;
             font-size: 14px;
-            min-width: 100px;
-        }
-        
-        .end-btn.secondary {
-            background: #444;
-        }
-        
-        /* LOOP BADGE */
-        .loop-badge {
-            position: absolute;
-            top: 50px;
-            left: 20px;
-            background: rgba(0,100,255,0.6);
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 10px;
-            color: white;
-            z-index: 2;
-            display: none;
-        }
-        
-        .loop-badge.active {
-            display: block;
-        }
-        
-        /* INDICADOR DE SCROLL */
-        .scroll-hint {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255,255,255,0.1);
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 12px;
-            z-index: 10;
-            animation: bounce 2s infinite;
-            display: none;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-10px); }
-        }
-        
-        /* NOTIFICACIONES */
-        .notification {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            padding: 12px 25px;
-            border-radius: 12px;
-            z-index: 1000;
-            animation: fadeInOut 2s;
-            display: none;
-        }
-        
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
-            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
-            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
         }
     </style>
 </head>
 <body>
     <!-- PANTALLA DE INICIO -->
     <div class="start-screen" id="startScreen">
-        <h1 style="font-size: 32px; margin-bottom: 10px;">🎬 VideoShorts</h1>
-        <p style="font-size: 16px; opacity: 0.8;">Desplázate hacia arriba/abajo para cambiar de video</p>
+        <h1 style="font-size: 32px; margin-bottom: 10px;">🎬 Mis Videos</h1>
+        <p style="font-size: 16px; opacity: 0.8;">Desplázate para ver tus videos</p>
         <button class="start-btn" id="startBtn">▶️ COMENZAR</button>
         
         <div style="margin-top: 30px;">
             <button class="config-btn" onclick="showConfigPanel()" style="background: #333; width: auto; padding: 10px 20px;">
-                ⚙️ Configurar Tus Videos
+                ⚙️ Configurar Mis Videos
             </button>
-        </div>
-        
-        <div class="scroll-hint" id="scrollHint">
-            ⬆️ Desplázate para cambiar de video ⬇️
         </div>
     </div>
     
     <!-- PANEL DE CONFIGURACIÓN -->
     <div class="config-panel" id="configPanel">
-        <h2 style="margin-bottom: 20px;">📁 Tus Videos</h2>
+        <h2 style="margin-bottom: 20px;">📁 Mis Videos</h2>
         <p style="font-size: 14px; margin-bottom: 15px; color: #aaa;">
-            Pega las URLs de tus videos 1920×1080 desde GitHub
+            Pega las URLs de TUS videos desde GitHub
         </p>
         
         <div id="videoInputs">
@@ -362,9 +273,6 @@
             <button class="config-btn" onclick="saveVideoUrls()">
                 💾 Guardar y Cerrar
             </button>
-            <button class="config-btn" onclick="useDemoVideos()" style="background: #555; margin-top: 10px;">
-                🎬 Usar Videos de Ejemplo
-            </button>
             <button class="config-btn" onclick="hideConfigPanel()" style="background: #777; margin-top: 10px;">
                 ❌ Cancelar
             </button>
@@ -372,7 +280,7 @@
         
         <div style="margin-top: 20px; font-size: 12px; color: #888;">
             <p>📌 Formato: https://raw.githubusercontent.com/usuario/repo/main/video.mp4</p>
-            <p>📌 Máximo: 5 videos</p>
+            <p>📌 Cuando un video termine, se REPETIRÁ automáticamente</p>
         </div>
     </div>
     
@@ -380,9 +288,6 @@
     <div class="videos-scroll-container" id="videosContainer" style="display: none;">
         <!-- Videos se cargan aquí dinámicamente -->
     </div>
-    
-    <!-- NOTIFICACIONES -->
-    <div class="notification" id="notification"></div>
 
     <script>
         // ============================================
@@ -391,7 +296,6 @@
         let videos = [];
         let currentVideoIndex = 0;
         let userStarted = false;
-        let loopEnabled = false;
         let isScrolling = false;
         let scrollTimeout = null;
 
@@ -403,22 +307,15 @@
         const videosContainer = document.getElementById('videosContainer');
         const configPanel = document.getElementById('configPanel');
         const videoInputs = document.getElementById('videoInputs');
-        const scrollHint = document.getElementById('scrollHint');
-        const notification = document.getElementById('notification');
 
         // ============================================
         // INICIALIZACIÓN
         // ============================================
         function initApp() {
-            console.log("🎬 Iniciando VideoShorts con scroll vertical...");
+            console.log("🎬 Iniciando VideoShorts...");
             
             // Cargar videos guardados
             loadSavedVideos();
-            
-            // Si no hay videos, mostrar panel de configuración
-            if (videos.length === 0) {
-                setTimeout(() => showConfigPanel(), 500);
-            }
             
             // Eventos
             startBtn.addEventListener('click', startVideos);
@@ -429,11 +326,6 @@
                     startVideos();
                 }
             });
-            
-            // Mostrar hint de scroll después de 3 segundos
-            setTimeout(() => {
-                scrollHint.style.display = 'block';
-            }, 3000);
         }
 
         // ============================================
@@ -449,6 +341,11 @@
                     console.error("Error cargando videos:", e);
                     videos = [];
                 }
+            }
+            
+            // Si no hay videos, mostrar panel de configuración
+            if (videos.length === 0) {
+                setTimeout(() => showConfigPanel(), 300);
             }
         }
 
@@ -477,7 +374,7 @@
             if (newVideos.length > 0) {
                 videos = newVideos;
                 localStorage.setItem('videoShortsUrls', JSON.stringify(videos));
-                showNotification(`✅ ${newVideos.length} videos guardados`);
+                alert(`✅ ${newVideos.length} videos guardados`);
                 hideConfigPanel();
                 
                 // Si la app ya está iniciada, recargar
@@ -485,51 +382,7 @@
                     renderAllVideos();
                 }
             } else {
-                showNotification("❌ Ingresa al menos una URL de video");
-            }
-        }
-
-        // ============================================
-        // USAR VIDEOS DE EJEMPLO
-        // ============================================
-        function useDemoVideos() {
-            videos = [
-                {
-                    id: 1,
-                    title: "Aurora Boreal - 1080p",
-                    author: "Nature 4K",
-                    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-                    likes: 0,
-                    comments: 0,
-                    shares: 0
-                },
-                {
-                    id: 2,
-                    title: "Skateboarding - Full HD",
-                    author: "Extreme Sports",
-                    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
-                    likes: 0,
-                    comments: 0,
-                    shares: 0
-                },
-                {
-                    id: 3,
-                    title: "Drone Flight - 1080p",
-                    author: "Aerial Views",
-                    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-                    likes: 0,
-                    comments: 0,
-                    shares: 0
-                }
-            ];
-            
-            localStorage.setItem('videoShortsUrls', JSON.stringify(videos));
-            console.log("📂 Videos de ejemplo cargados");
-            showNotification("🎬 Videos de ejemplo cargados");
-            hideConfigPanel();
-            
-            if (userStarted) {
-                renderAllVideos();
+                alert("❌ Ingresa al menos una URL de video");
             }
         }
 
@@ -545,7 +398,7 @@
                 videoInputs.innerHTML += `
                     <input type="text" 
                            class="video-input config-input" 
-                           placeholder="URL del Video ${i + 1} (1920×1080)"
+                           placeholder="URL de TU Video ${i + 1}"
                            value="${video.videoUrl}"
                            style="margin-bottom: 12px;">
                 `;
@@ -565,7 +418,7 @@
             if (userStarted) return;
             
             if (videos.length === 0) {
-                showNotification("⚠️ Configura tus videos primero");
+                alert("⚠️ Primero configura TUS videos");
                 showConfigPanel();
                 return;
             }
@@ -605,29 +458,16 @@
                 
                 videoScreen.innerHTML = `
                     <div class="quality-badge" id="quality-${index}">🎬 1080p</div>
-                    <div class="loop-badge" id="loop-${index}">🔁 LOOP</div>
                     <div class="current-indicator" id="indicator-${index}">${index + 1}/${videos.length}</div>
                     
                     <video class="video-element" 
                            id="video-element-${index}"
                            playsinline
                            preload="auto"
-                           ${loopEnabled ? 'loop' : ''}>
+                           loop> <!-- LOOP SIEMPRE ACTIVADO -->
                         <source src="${video.videoUrl}" type="video/mp4">
                         Tu navegador no soporta el video.
                     </video>
-                    
-                    <div class="end-overlay" id="end-overlay-${index}">
-                        <div class="end-options">
-                            <h3 style="margin-bottom: 15px;">🎬 Video Terminado</h3>
-                            <button class="end-btn" onclick="replayVideo(${index})">🔄 Repetir</button>
-                            <button class="end-btn secondary" onclick="nextVideoByIndex(${index})">⏭️ Siguiente</button>
-                            <div style="margin-top: 15px;">
-                                <button class="end-btn secondary" onclick="toggleLoopForVideo(${index})" 
-                                        id="loop-btn-${index}">🔄 Loop: OFF</button>
-                            </div>
-                        </div>
-                    </div>
                     
                     <div class="video-info">
                         <div class="video-title">${video.title}</div>
@@ -635,6 +475,15 @@
                             <div class="author-avatar"></div>
                             <span>${video.author}</span>
                         </div>
+                    </div>
+                    
+                    <div class="nav-buttons">
+                        <button class="nav-btn" onclick="goToVideo(${index > 0 ? index - 1 : videos.length - 1})">
+                            ⏮️ Anterior
+                        </button>
+                        <button class="nav-btn" onclick="goToVideo(${(index + 1) % videos.length})">
+                            ⏭️ Siguiente
+                        </button>
                     </div>
                     
                     <div class="video-actions">
@@ -656,7 +505,7 @@
                 setupVideoEvents(index);
             });
             
-            // Configurar evento de scroll
+            // Configurar evento de scroll CORREGIDO
             setupScrollEvents();
             
             // Actualizar indicador del primer video
@@ -668,25 +517,11 @@
         // ============================================
         function setupVideoEvents(index) {
             const videoElement = document.getElementById(`video-element-${index}`);
-            const endOverlay = document.getElementById(`end-overlay-${index}`);
             
             if (!videoElement) return;
             
-            // Cuando el video termina
-            videoElement.addEventListener('ended', () => {
-                console.log(`📼 Video ${index + 1} terminado`);
-                
-                if (!loopEnabled) {
-                    // Mostrar overlay de fin
-                    endOverlay.classList.add('show');
-                } else {
-                    // Si loop está activado, reiniciar
-                    setTimeout(() => {
-                        videoElement.currentTime = 0;
-                        videoElement.play();
-                    }, 500);
-                }
-            });
+            // Cuando el video termina - SE REPITE AUTOMÁTICAMENTE (loop ya está activado)
+            // No hacemos nada especial porque loop="true" hace que se repita solo
             
             // Clic en el video para pausar/reproducir
             videoElement.addEventListener('click', (e) => {
@@ -701,7 +536,6 @@
             // Error de carga
             videoElement.addEventListener('error', (e) => {
                 console.error(`❌ Error en video ${index + 1}:`, e);
-                showNotification(`Error cargando video ${index + 1}`);
             });
             
             // Cuando se cargan los metadatos
@@ -712,61 +546,98 @@
                 
                 if (qualityBadge) {
                     if (width > height) {
-                        qualityBadge.textContent = `🎬 ${width}×${height} (Horizontal)`;
+                        qualityBadge.textContent = `🎬 ${width}×${height}`;
                     } else {
-                        qualityBadge.textContent = `🎬 ${width}×${height} (Vertical)`;
+                        qualityBadge.textContent = `🎬 ${width}×${height}`;
                     }
                 }
             });
         }
 
         // ============================================
-        // CONFIGURAR EVENTOS DE SCROLL
+        // CONFIGURAR EVENTOS DE SCROLL - CORREGIDO
         // ============================================
         function setupScrollEvents() {
-            let scrollTimeout;
+            let lastScrollTime = 0;
+            let scrollDirection = 0;
+            let scrollAccumulator = 0;
+            const SCROLL_THRESHOLD = 50; // Píxeles para cambiar de video
+            const SCROLL_COOLDOWN = 300; // ms entre cambios
             
             videosContainer.addEventListener('scroll', () => {
-                if (isScrolling) return;
-                
-                isScrolling = true;
-                
-                // Calcular qué video está visible
-                const scrollPosition = videosContainer.scrollTop;
+                const now = Date.now();
+                const scrollTop = videosContainer.scrollTop;
                 const screenHeight = window.innerHeight;
-                const newIndex = Math.round(scrollPosition / screenHeight);
                 
-                // Verificar si cambió de video
-                if (newIndex !== currentVideoIndex && newIndex >= 0 && newIndex < videos.length) {
-                    // Pausar video anterior
-                    const prevVideoElement = document.getElementById(`video-element-${currentVideoIndex}`);
-                    if (prevVideoElement) {
-                        prevVideoElement.pause();
-                        // Ocultar overlay de fin si está visible
-                        const prevEndOverlay = document.getElementById(`end-overlay-${currentVideoIndex}`);
-                        if (prevEndOverlay) {
-                            prevEndOverlay.classList.remove('show');
+                // Calcular dirección del scroll
+                const newDirection = scrollTop > (currentVideoIndex * screenHeight) ? 1 : -1;
+                
+                // Acumular scroll
+                scrollAccumulator += newDirection;
+                
+                // Si ha pasado suficiente tiempo desde el último cambio
+                if (now - lastScrollTime > SCROLL_COOLDOWN) {
+                    // Si el scroll acumulado supera el umbral
+                    if (Math.abs(scrollAccumulator) > SCROLL_THRESHOLD / 2) {
+                        let newIndex = currentVideoIndex;
+                        
+                        if (scrollAccumulator > 0 && currentVideoIndex < videos.length - 1) {
+                            // Scroll hacia abajo - siguiente video
+                            newIndex = currentVideoIndex + 1;
+                        } else if (scrollAccumulator < 0 && currentVideoIndex > 0) {
+                            // Scroll hacia arriba - video anterior
+                            newIndex = currentVideoIndex - 1;
+                        }
+                        
+                        // Solo cambiar si el índice es diferente
+                        if (newIndex !== currentVideoIndex) {
+                            // Pausar video actual
+                            const currentVideoElement = document.getElementById(`video-element-${currentVideoIndex}`);
+                            if (currentVideoElement) {
+                                currentVideoElement.pause();
+                            }
+                            
+                            // Actualizar índice
+                            currentVideoIndex = newIndex;
+                            
+                            // Hacer scroll al video correcto
+                            videosContainer.scrollTo({
+                                top: currentVideoIndex * screenHeight,
+                                behavior: 'smooth'
+                            });
+                            
+                            // Reproducir nuevo video
+                            playCurrentVideo();
+                            
+                            // Actualizar indicador
+                            updateVideoIndicator(currentVideoIndex);
+                            
+                            // Resetear acumulador y tiempo
+                            scrollAccumulator = 0;
+                            lastScrollTime = now;
                         }
                     }
-                    
-                    // Actualizar índice
-                    currentVideoIndex = newIndex;
-                    
-                    // Reproducir nuevo video
-                    playCurrentVideo();
-                    
-                    // Actualizar indicador
-                    updateVideoIndicator(currentVideoIndex);
-                    
-                    // Mostrar notificación del video actual
-                    showNotification(`Video ${currentVideoIndex + 1}/${videos.length}: ${videos[currentVideoIndex].title}`);
                 }
                 
-                // Permitir nuevo scroll después de un breve tiempo
-                clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(() => {
-                    isScrolling = false;
-                }, 300);
+                // Si no estamos cambiando de video, mantener el scroll en posición
+                const expectedScroll = currentVideoIndex * screenHeight;
+                if (Math.abs(scrollTop - expectedScroll) > 10 && now - lastScrollTime > 100) {
+                    videosContainer.scrollTo({
+                        top: expectedScroll,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+            
+            // También manejar el evento de fin de scroll
+            videosContainer.addEventListener('scrollend', () => {
+                // Asegurar que estamos en el video correcto
+                const screenHeight = window.innerHeight;
+                const expectedScroll = currentVideoIndex * screenHeight;
+                videosContainer.scrollTo({
+                    top: expectedScroll,
+                    behavior: 'smooth'
+                });
             });
         }
 
@@ -777,22 +648,42 @@
             const videoElement = document.getElementById(`video-element-${currentVideoIndex}`);
             if (!videoElement) return;
             
-            // Ocultar overlay de fin si está visible
-            const endOverlay = document.getElementById(`end-overlay-${currentVideoIndex}`);
-            if (endOverlay) {
-                endOverlay.classList.remove('show');
-            }
-            
             // Reproducir
             videoElement.play().catch(error => {
                 console.log("Error al reproducir:", error);
-                // Si falla, intentar con click simulado
+                // Reintentar
                 setTimeout(() => {
                     videoElement.play().catch(e => {
                         console.log("Segundo intento fallido:", e);
                     });
                 }, 500);
             });
+        }
+
+        // ============================================
+        // IR A UN VIDEO ESPECÍFICO
+        // ============================================
+        function goToVideo(index) {
+            // Pausar video actual
+            const currentVideoElement = document.getElementById(`video-element-${currentVideoIndex}`);
+            if (currentVideoElement) {
+                currentVideoElement.pause();
+            }
+            
+            // Actualizar índice
+            currentVideoIndex = index;
+            
+            // Hacer scroll al video
+            videosContainer.scrollTo({
+                top: currentVideoIndex * window.innerHeight,
+                behavior: 'smooth'
+            });
+            
+            // Reproducir nuevo video
+            playCurrentVideo();
+            
+            // Actualizar indicador
+            updateVideoIndicator(currentVideoIndex);
         }
 
         // ============================================
@@ -807,62 +698,6 @@
                     indicator.style.background = i === index ? 'rgba(255,0,80,0.7)' : 'rgba(0,0,0,0.6)';
                 }
             }
-        }
-
-        // ============================================
-        // FUNCIONES DE CONTROL
-        // ============================================
-        function replayVideo(index) {
-            const videoElement = document.getElementById(`video-element-${index}`);
-            const endOverlay = document.getElementById(`end-overlay-${index}`);
-            
-            if (videoElement) {
-                videoElement.currentTime = 0;
-                videoElement.play();
-            }
-            
-            if (endOverlay) {
-                endOverlay.classList.remove('show');
-            }
-        }
-
-        function nextVideoByIndex(index) {
-            const nextIndex = (index + 1) % videos.length;
-            
-            // Hacer scroll al siguiente video
-            videosContainer.scrollTo({
-                top: nextIndex * window.innerHeight,
-                behavior: 'smooth'
-            });
-        }
-
-        function toggleLoopForVideo(index) {
-            loopEnabled = !loopEnabled;
-            
-            // Actualizar todos los videos
-            for (let i = 0; i < videos.length; i++) {
-                const videoElement = document.getElementById(`video-element-${i}`);
-                const loopBadge = document.getElementById(`loop-${i}`);
-                const loopBtn = document.getElementById(`loop-btn-${i}`);
-                
-                if (videoElement) {
-                    videoElement.loop = loopEnabled;
-                }
-                
-                if (loopBadge) {
-                    if (loopEnabled) {
-                        loopBadge.classList.add('active');
-                    } else {
-                        loopBadge.classList.remove('active');
-                    }
-                }
-                
-                if (loopBtn) {
-                    loopBtn.textContent = loopEnabled ? '🔄 Loop: ON' : '🔄 Loop: OFF';
-                }
-            }
-            
-            showNotification(loopEnabled ? '🔁 Loop activado' : '🔁 Loop desactivado');
         }
 
         // ============================================
@@ -881,7 +716,6 @@
                         likeCount.style.fontWeight = '';
                     }, 500);
                 }
-                showNotification('❤️ Like agregado');
             }
         }
 
@@ -893,7 +727,6 @@
                 if (commentCount) {
                     commentCount.textContent = videos[index].comments;
                 }
-                showNotification('💬 Comentario agregado');
             }
         }
 
@@ -904,20 +737,7 @@
                 if (shareCount) {
                     shareCount.textContent = videos[index].shares;
                 }
-                showNotification('↪️ Video compartido');
             }
-        }
-
-        // ============================================
-        // NOTIFICACIONES
-        // ============================================
-        function showNotification(message) {
-            notification.textContent = message;
-            notification.style.display = 'block';
-            
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 2000);
         }
 
         // ============================================
@@ -929,22 +749,18 @@
             switch(e.code) {
                 case 'ArrowDown':
                     e.preventDefault();
-                    // Ir al siguiente video
-                    const nextIndex = (currentVideoIndex + 1) % videos.length;
-                    videosContainer.scrollTo({
-                        top: nextIndex * window.innerHeight,
-                        behavior: 'smooth'
-                    });
+                    // Ir al siguiente video (si existe)
+                    if (currentVideoIndex < videos.length - 1) {
+                        goToVideo(currentVideoIndex + 1);
+                    }
                     break;
                     
                 case 'ArrowUp':
                     e.preventDefault();
-                    // Ir al video anterior
-                    const prevIndex = currentVideoIndex === 0 ? videos.length - 1 : currentVideoIndex - 1;
-                    videosContainer.scrollTo({
-                        top: prevIndex * window.innerHeight,
-                        behavior: 'smooth'
-                    });
+                    // Ir al video anterior (si existe)
+                    if (currentVideoIndex > 0) {
+                        goToVideo(currentVideoIndex - 1);
+                    }
                     break;
                     
                 case 'Space':
@@ -957,16 +773,6 @@
                             videoElement.pause();
                         }
                     }
-                    break;
-                    
-                case 'KeyL':
-                    e.preventDefault();
-                    toggleLoopForVideo(currentVideoIndex);
-                    break;
-                    
-                case 'KeyR':
-                    e.preventDefault();
-                    replayVideo(currentVideoIndex);
                     break;
                     
                 case 'KeyC':
